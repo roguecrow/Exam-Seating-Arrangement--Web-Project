@@ -1,0 +1,276 @@
+@charset "ISO-8859-1";
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: whitesmoke;
+}
+
+.navbar-brand img {
+    margin-left: 10px;
+    width: 100px;
+    height: auto; 
+    filter: brightness(0%) contrast(100%); 
+}
+
+.custom-navbar {
+    background-color: #ffffff;
+}
+
+.navbar-nav .nav-link:hover {
+    color: blue; /* Change to the desired color on hover */
+}
+
+.container {
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.course-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.course-card {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 10px;
+    width: calc(33.33% - 20px); 
+    box-sizing: border-box; 
+    color: inherit;
+    text-decoration: none; 
+    background-color: rgba(255, 255, 255, 1.0); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.course-card img {
+    width: 100%; 
+    height: 200px; 
+    object-fit: contain;
+}
+
+@media screen and (max-width: 600px) {
+    .course-card {
+        width: 100%;
+    }
+}
+
+.login, .register {
+    float: right;
+}
+
+.search-form {
+    margin-left: 70px;
+    width: 400px;
+}
+
+.search-bar {
+    border-radius: 20px;
+}
+
+.submit-button {
+    border-radius: 20px;
+}
+
+.btn-black {
+    color: #000; 
+    background-color: #0000; 
+    border-color: #000;
+}
+
+.btn-black:hover {
+    color: #fff; 
+    background-color: #000; 
+    border-color: #000;
+}
+
+.carousel {
+    width: 100vw; 
+}
+
+.carousel-inner {
+    max-width: 100%; 
+    margin: 0 auto;
+    height: 300px;
+}
+
+.carousel-item img {
+    width: 100%; 
+    height: 400px;
+    object-fit: fill;
+}
+
+.partners-banner_wrapper {
+    background-color: #f9f9f9;
+    padding: 20px; 
+    display: flex;
+    justify-content: center;
+}
+
+.partners-banner_heading {
+    font-size: 20px;
+    margin-bottom: 20px; 
+    justify-content: center;
+    display: flex;
+}
+
+.partner-logos_list {
+    list-style: none; 
+    padding: 0;
+    margin: 0; 
+}
+
+.partner-logos_item {
+    display: inline-block;
+    margin-right: 20px; 
+}
+
+.partner-logos_item:last-child {
+    margin-right: 0; 
+}
+
+.partner-logos_item img {
+    max-width: 100px; 
+    height: auto;
+    padding: 20px;
+}
+
+.carousel-caption {
+    text-align: left;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    position: absolute;
+    top: 22%;
+    right: 60%; 
+    color: rgb(10, 6, 6); 
+    height: fit-content;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 1.0); 
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'CustomFontRegular', sans-serif;
+}
+
+.carousel-caption p {
+    margin: 0;
+    padding: 0;
+}
+
+.banner-title {
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.cards-title-container {
+    padding: 25px;
+}
+
+.cards-title-container h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;  
+}
+
+.cards-title-container h4 {
+    font-weight: 100;
+    font-size: larger;
+    color: #0000008e;
+}
+
+.course-card:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Change background color on hover */
+}
+
+.learning-tabs {
+    padding: 25px;
+}
+
+.learning-tabs h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+}
+
+.nav-link-tab {
+    font-size: 20px; /* Change the font size as needed */
+    padding: 20px 30px; /* Adjust padding as needed */
+    margin-bottom: 10px; /* Add margin between links */
+    border-radius: 10px;
+    margin: 15px;
+    width: 500px;
+    justify-content: left;
+    color: #000;
+    background-color: rgba(255, 255, 255, 1.0); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-decoration: none; /* Remove underline */
+}
+
+.nav-link-tab:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Change background color on hover */
+}
+
+.nav-link-tab:focus {
+    background-color: rgba(0, 0, 255, 0.053); /* Change background color when tab is focused */
+    border: 1px solid #e7b2ff; /* Change border color as needed */
+}
+
+.nav-link-tab h4 {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.nav-link-tab p1 {
+    font-size: medium;
+}
+
+.tab-pane {
+    padding-left: 300px;
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.tab-pane .card img {
+    max-width: 100%;
+    object-fit: cover;
+}
+
+.container-footer {
+    background-color: rgba(255, 255, 255, 1.0);   
+    box-shadow: 0 0 10px rgba(69, 69, 69, 0.1);  
+} 
+
+.page-footer h3 {
+    color: #000;
+    margin: 25px;
+    justify-content: center;
+    margin-left: 40px; 
+    font-size: small;
+}
+
+.footer-link {
+    text-decoration: none; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+

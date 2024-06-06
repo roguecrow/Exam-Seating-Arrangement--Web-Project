@@ -1,0 +1,107 @@
+           
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main-div {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color:#e8dbd2;
+    max-width: fit-content;
+    height: fit-content;
+    padding: 40px;
+    border-radius: 20px 0px 0px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'CustomFontRegular', sans-serif;
+}
+
+.first-line {
+    font-family:"Trirong", serif;
+    font-size:smaller;
+}
+
+.second-line {
+    font-family: 'CustomFontRegular', sans-serif;
+    font-size: smaller;
+    font-weight: 100;
+    font-stretch: expanded;
+}
+
+form {
+    padding-right: 100px;
+}
+
+h1 {
+    color: #333;
+}
+
+input[type="email"],
+input[type="password"],
+button[type="submit"] {
+    width: 150%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+     background-color: #454545;
+    color: #fff;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #000000;
+}
+
+.sign-navigator {
+    margin-top: 20px;
+    font-size: normal;
+    font-weight: lighter;
+    font-size:medium;
+}
+
+.sign-navigator a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: lighter;
+    font-size: medium;
+}
+
+.sign-navigator a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    display: flex;
+    margin-top: 60px;
+    width: fit-content;
+    border-radius: 20px;
+}
+
+.image-container {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-image: url('signin_img.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center right; 
+    border-radius: 0px 20px 20px 0px;
+    width: 500px;  
+    height: auto; 
+    margin: 0 auto; 
+}
+
+.image-container h1 {
+    font-family: "Dancing Script", cursive;
+    padding-top: 70px;
+    padding-left: 120px;
+    font-optical-sizing: auto;
+    font-style: normal;
+    color: rgba(0, 0, 0, 0);
+    opacity: 0;
+}
