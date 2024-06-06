@@ -1,23 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
-<div class="modal fade" id="addExamModal" tabindex="-1" role="dialog" aria-labelledby="addExamModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateExamModal" tabindex="-1" role="dialog" aria-labelledby="updateExamModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addExamModalLabel">Add New Exam</h5>
+                <h5 class="modal-title" id="updateExamModalLabel">Update Exam Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addExamForm" action="AddExam" method="post"> 
+                <form id="updateExamForm" action="UpdateExam" method="post"> 
                     <div class="form-group">
                         <label for="examName">Exam Name</label>
-                        <input type="text" class="form-control" id="examName" name="examName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="examDescription">Exam Description</label>
-                        <textarea class="form-control" id="examDescription" name="examDescription" rows="3" required></textarea>
+                        <input type="text" class="form-control" id="examName" name="examName" readonly>
                     </div>
                     <div class="form-group">
                         <label for="examDate">Exam Date</label>
@@ -35,7 +30,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="addExamForm">Save Exam</button>
+                <button type="submit" class="btn btn-primary" form="updateExamForm">Save Changes</button>
             </div>
         </div>
     </div>

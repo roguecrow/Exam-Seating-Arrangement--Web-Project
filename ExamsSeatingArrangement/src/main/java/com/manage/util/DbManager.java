@@ -156,4 +156,24 @@ public class DbManager {
 		
 		return row;
 	}
+	
+	public ArrayList<ExamDetails> findExam(String examName) throws SQLException {
+	    ArrayList<ExamDetails> searchedExams = new ArrayList<>();
+	    String searchQuery = "SELECT * FROM exams WHERE exam_name LIKE ?";
+	    PreparedStatement preparedStatement = connect.prepareStatement(searchQuery);
+	    preparedStatement.setString(1, "%" + examName + "%"); // Use "%" to match any characters before and after the examName
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    while (resultSet.next()) {
+	        int examId = resultSet.getInt("exam_id");
+	        String name = resultSet.getString("exam_name");
+	        String description = resultSet.getString("description");
+	        Date examDate = resultSet.getDate("exam_date");
+	        Timestamp applicationStartDate = resultSet.getTimestamp("application_start_date");
+	        Timestamp applicationEndDate = resultSet.getTimestamp("application_end_date");
+	        ExamDetails exam = new ExamDetails(examId, name, description, examDate, applicationStartDate, applicationEndDate);
+	        searchedExams.add(exam);
+	    }
+	    return searchedExams;
+	}
+
 }

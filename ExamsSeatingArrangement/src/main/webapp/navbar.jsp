@@ -37,12 +37,12 @@ int roleId = userDetails != null ? userDetails.getRoleId() : 1;
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="about_us_page.html">Help</a></li>
-                    <form class="d-flex search-form" role="search">
-                        <input class="form-control me-2 search-bar" type="search" placeholder="Search Exams..." aria-label="Search">
+                        <form class="d-flex search-form" role="search" action="SearchViewServlet" method="GET">
+                        <input class="form-control me-2 search-bar" type="search" name="query" placeholder="Search User..." aria-label="Search">
                         <button class="btn btn-outline-success submit-button btn-black" type="submit">
-                            <i class="fas fa-search"></i>
+                        <i class="fas fa-search"></i>
                         </button>
-                    </form>
+                        </form>
                 </ul>
                 <div class="dropdown profile-dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">

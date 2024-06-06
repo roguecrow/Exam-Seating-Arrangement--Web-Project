@@ -18,10 +18,8 @@ public class GetExamDetailsServlet extends HttpServlet {
             throws ServletException, IOException, ClassNotFoundException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            // Retrieve examId parameter from request
             int examId = Integer.parseInt(request.getParameter("examId"));
             
-            // Retrieve exam details from the database
             DbManager dbManager = new DbManager();
             ExamDetails examDetails = null;
             try {

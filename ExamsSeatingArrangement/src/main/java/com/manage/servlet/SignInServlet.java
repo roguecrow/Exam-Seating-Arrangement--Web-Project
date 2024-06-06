@@ -69,7 +69,9 @@ public class SignInServlet extends HttpServlet {
                     else  {
                         manage.userRegisteration(name, email, mask.encrypt(password));
                         manage.findUser(email, password, details, false);
+                       
                         session.setAttribute("userDetails", details);
+                        session.setAttribute("exams", manage.getAllExams());
                         response.sendRedirect("HomePage.jsp");
                     }
 
@@ -79,6 +81,7 @@ public class SignInServlet extends HttpServlet {
                     if (manage.findUser(email, password,details,true)) {
                         System.out.println(details.getUsername() +" "+ details.getRollNo());
                         session.setAttribute("userDetails", details);
+                        session.setAttribute("exams", manage.getAllExams());
                         response.sendRedirect("HomePage.jsp");
                     } else {
                         
