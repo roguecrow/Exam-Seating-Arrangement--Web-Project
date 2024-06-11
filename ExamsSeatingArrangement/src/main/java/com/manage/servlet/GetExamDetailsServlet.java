@@ -1,7 +1,8 @@
 package com.manage.servlet;
 
+import com.manage.dao.DbManager;
 import com.manage.model.ExamDetails;
-import com.manage.util.DbManager;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "GetExamDetailsServlet", urlPatterns = {"/GetExamDetailsServlet"})
 public class GetExamDetailsServlet extends HttpServlet {
@@ -33,6 +35,7 @@ public class GetExamDetailsServlet extends HttpServlet {
             out.println("<p><strong>Exam Date:</strong> " + examDetails.getExamDate() + "</p>");
             out.println("<p><strong>Application Start Date:</strong> " + examDetails.getApplicationStartDate() + "</p>");
             out.println("<p><strong>Application End Date:</strong> " + examDetails.getApplicationEndDate() + "</p>");
+            
         }
     }
 
@@ -51,9 +54,11 @@ public class GetExamDetailsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-			processRequest(request, response);
-		} catch (ClassNotFoundException | ServletException | IOException | SQLException e) {
+    	try {
+    		HttpSession session = request.getSession();
+			DbManager manage = new DbManager();
+			session.setAttribute("exams", manage.getAllExams());
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

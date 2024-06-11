@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +6,98 @@
     <title>Add New Exam</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
         .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            max-width: 800px;
+        }
+
+        h2 {
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #495057;
+            font-weight: bold;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+
+        #addLocationButton {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #addLocationButton:hover {
+            background-color: #218838;
+        }
+
+        .removeLocationButton {
+            margin-top: 10px;
+        }
+
+        .removeLocationButton {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .removeLocationButton:hover {
+            background-color: #c82333;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0069d9;
+        }
+
+        hr {
+            border-top: 1px solid #dee2e6;
+        }
+
+        .location-entry {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
             margin-top: 20px;
         }
-        .error {
-            color: red;
+
+        .location-entry h4 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>

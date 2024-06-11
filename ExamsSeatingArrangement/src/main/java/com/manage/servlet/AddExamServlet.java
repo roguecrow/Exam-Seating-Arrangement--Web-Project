@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.manage.util.DbManager;
+import com.manage.dao.DbManager;
 
 /**
  * Servlet implementation class AddExam
@@ -73,12 +73,12 @@ public class AddExamServlet extends HttpServlet {
                 int affectedRows = manage.addLocationToExam(city, venueName, hallName, capacity, address, locationUrl, examId);
                 
                 if (affectedRows != 1) {
-                    response.sendRedirect("HomePage.jsp?message=errorAddingExam");
+                    response.sendRedirect("homePage.jsp?message=errorAddingExam");
                     return;
                 }
             }
             
-            response.sendRedirect("HomePage.jsp?message=examAddedSuccessfully");
+            response.sendRedirect("homePage.jsp?message=examAddedSuccessfully");
         } catch (java.sql.SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             try {
@@ -88,10 +88,10 @@ public class AddExamServlet extends HttpServlet {
             } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
-            response.sendRedirect("HomePage.jsp?message=errorAddingExam");
+            response.sendRedirect("homePage.jsp?message=errorAddingExam");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            response.sendRedirect("HomePage.jsp?message=errorAddingExam");
+            response.sendRedirect("homePage.jsp?message=errorAddingExam");
         }
 
         System.out.println("Exam Name: " + examName);

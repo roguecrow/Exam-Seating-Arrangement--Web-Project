@@ -20,21 +20,38 @@ public class UserDetails {
     private int serialNo;
     private String aadharNumber;
 
-    // Getters and Setters for each field
+    // Getters and setters for all fields
 
     public int getRollNo() {
-		return rollNo;
-	}
+        return rollNo;
+    }
 
-	public void setRollNo(int rollNo) {
-		this.rollNo = rollNo;
-	}
-	
+    public void setRollNo(int rollNo) {
+        this.rollNo = rollNo;
+    }
+
     public String getName() {
         return name;
     }
-	public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Date getDob() {
@@ -132,21 +149,4 @@ public class UserDetails {
     public void setAadharNumber(String aadharNumber) {
         this.aadharNumber = aadharNumber;
     }
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public int getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
 }
-

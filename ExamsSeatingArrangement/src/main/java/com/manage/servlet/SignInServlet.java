@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.manage.dao.DbManager;
 import com.manage.encrypt.PasswordEncryption;
 import com.manage.model.UserDetails;
-import com.manage.util.DbManager;
 
 /**
  * Servlet implementation class FirstServlet
@@ -72,7 +72,7 @@ public class SignInServlet extends HttpServlet {
                        
                         session.setAttribute("userDetails", details);
                         session.setAttribute("exams", manage.getAllExams());
-                        response.sendRedirect("HomePage.jsp");
+                        response.sendRedirect("homePage.jsp");
                     }
 
                     break;
@@ -82,7 +82,7 @@ public class SignInServlet extends HttpServlet {
                         System.out.println(details.getUsername() +" "+ details.getRollNo());
                         session.setAttribute("userDetails", details);
                         session.setAttribute("exams", manage.getAllExams());
-                        response.sendRedirect("HomePage.jsp");
+                        response.sendRedirect("homePage.jsp");
                     } else {
                         
                         request.setAttribute("errorMessage", "Invalid email or password. Please try again.");

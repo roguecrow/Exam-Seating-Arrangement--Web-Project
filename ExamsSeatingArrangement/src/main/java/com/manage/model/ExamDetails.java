@@ -1,9 +1,11 @@
 package com.manage.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class ExamDetails {
+@SuppressWarnings("serial")
+public class ExamDetails implements Serializable{
 	private int examId;
     private String examName;
     private String description;
@@ -48,7 +50,7 @@ public class ExamDetails {
 		return applicationStartDate;
 	}
 
-	public void setApplicationStartDate(Timestamp applicationStartDate) {
+	public void setApplicationStartDate(Date applicationStartDate) {
 		this.applicationStartDate = applicationStartDate;
 	}
 
@@ -56,11 +58,11 @@ public class ExamDetails {
 		return applicationEndDate;
 	}
 
-	public void setApplicationEndDate(Timestamp applicationEndDate) {
+	public void setApplicationEndDate(Date applicationEndDate) {
 		this.applicationEndDate = applicationEndDate;
 	}
 
-    public ExamDetails(int examId, String examName, String description, Date examDate, Timestamp applicationStartDate, Timestamp applicationEndDate) {
+    public ExamDetails(int examId, String examName, String description, Date examDate, Date applicationStartDate, Date applicationEndDate) {
         this.examId = examId;
         this.examName = examName;
         this.description = description;

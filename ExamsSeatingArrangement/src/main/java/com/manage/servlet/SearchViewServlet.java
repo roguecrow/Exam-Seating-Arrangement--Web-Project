@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.manage.util.DbManager;
+import com.manage.dao.DbManager;
 
 /**
  * Servlet implementation class SearchViewServlet
@@ -41,7 +41,7 @@ public class SearchViewServlet extends HttpServlet {
 			if(queryString != null) {
 	            HttpSession session = request.getSession();
                 session.setAttribute("exams", manage.findExam(queryString));
-                response.sendRedirect("HomePage.jsp");
+                response.sendRedirect("homePage.jsp");
 			}
 
 		} catch (ClassNotFoundException e) {
