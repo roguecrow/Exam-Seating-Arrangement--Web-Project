@@ -31,14 +31,14 @@ int roleId = userDetails != null ? userDetails.getRoleId() : 1;
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
                             <li><a class="dropdown-item" href="service1.html">view Application status</a></li>
-                            <li><a class="dropdown-item" href="service2.html">view exam seat allocation</a></li>
+                            <li><a class="dropdown-item" href="examSeatViewer.jsp">view exam seat allocation</a></li>
                             <li><a class="dropdown-item" href="service3.html">Service 3</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="about_us_page.html">Help</a></li>
                         <form class="d-flex search-form" role="search" action="SearchViewServlet" method="GET">
-                        <input class="form-control me-2 search-bar" type="search" name="query" placeholder="Search User..." aria-label="Search">
+                        <input class="form-control me-2 search-bar" type="search" name="query" placeholder="Search Exams..." aria-label="Search">
                         <button class="btn btn-outline-success submit-button btn-black" type="submit">
                         <i class="fas fa-search"></i>
                         </button>

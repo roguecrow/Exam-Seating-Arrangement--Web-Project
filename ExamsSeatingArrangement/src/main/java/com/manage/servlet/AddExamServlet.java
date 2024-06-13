@@ -73,6 +73,8 @@ public class AddExamServlet extends HttpServlet {
                 int affectedRows = manage.addLocationToExam(city, venueName, hallName, capacity, address, locationUrl, examId);
                 
                 if (affectedRows != 1) {
+                    int row = manage.deleteExam(examId); 
+                    System.out.println("affected row: " + row);
                     response.sendRedirect("homePage.jsp?message=errorAddingExam");
                     return;
                 }

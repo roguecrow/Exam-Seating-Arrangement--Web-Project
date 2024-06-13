@@ -5,7 +5,7 @@
 <%@ page import="com.manage.dao.DbManager"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.sql.SQLException"%>
-
+<%@ page import= "java.util.ArrayList" %>
 
 
 <!DOCTYPE html>
@@ -98,13 +98,7 @@
     flex-direction: column;
 }
 
-.right-container {
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	flex: 1;
-	background-color: #ffffff;
-	padding: 20px;
-}
+
 
 .card {
 	margin-bottom: 20px;
@@ -273,279 +267,280 @@ body {
     margin-left:120px;
     position: absolute;
 }
+.badge {
+padding: 10px;
+}
 
 </style>
 
 </head>
 <body>
-	<%
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	response.setHeader("Pragma", "no-cache");
-	response.setHeader("Expires", "0");
+    <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setHeader("Expires", "0");
 
-	if (session == null || session.getAttribute("userDetails") == null) {
-		response.sendRedirect("login.jsp");
-		return;
-	}
+    if (session == null || session.getAttribute("userDetails") == null) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
+    DbManager manage = new DbManager();
+    UserDetails userDetails = (UserDetails) session.getAttribute("userDetails");
+    String userName = userDetails != null ? userDetails.getUsername() : "User";
+    int roleId = userDetails != null ? userDetails.getRoleId() : 1;
+    int examId = 0;
+    List<ExamDetails> exams = (List<ExamDetails>) session.getAttribute("exams");
+    List<Integer> appliedExams = manage.getExamIdsForRollNo(userDetails.getRollNo());
+    %>
 
-	UserDetails userDetails = (UserDetails) session.getAttribute("userDetails");
-	String userName = userDetails != null ? userDetails.getUsername() : "User";
-	int roleId = userDetails != null ? userDetails.getRoleId() : 1;
-	int examId = 0;
-	List<ExamDetails> exams = (List<ExamDetails>) session.getAttribute("exams");
-	%>
-
-	<div id="alertMessage" class="alert" role="alert"></div>
-
-	<div id="nav-placeholder"></div>
-	<div class="container-fluid container-wrapper">
-		<div class="row h-100">
-			<div class="col-lg-8 col-md-7 col-sm-12 left-container">
-				<% if (roleId == 0) { %>
-				<a href="addExam.jsp" class="btn btn-primary add-exam-button">Add
-					New Exam</a>
-				<% } %>
-				<h2>Exams</h2>
-				<button id="showAllExamsBtn" class="btn btn-outline-secondary">Show All</button>
-				<%
-				if (exams != null && !exams.isEmpty()) {
-						for (ExamDetails exam : exams) {
-				%>
-				<div class="card" id="exam<%=exam.getExamId()%>">
-					<div class="card-body">
-						<div>
-							<h5 class="card-title"><%=exam.getExamName()%></h5>
-							<p class="card-text"><%=exam.getDescription()%></p>
-						</div>
-						<%
-						if (roleId == 0) {
-						%>
-						<button class="btn btn-light edit-btn" data-toggle="modal"
-							data-target="#updateExamModal"
-							data-exam-id="<%=exam.getExamId()%>"
-							data-exam-name="<%=exam.getExamName()%>"
-							data-exam-date="<%=exam.getExamDate()%>"
-							data-application-start="<%=exam.getApplicationStartDate()%>"
-							data-application-end="<%=exam.getApplicationEndDate()%>">
-							<i class="fa fa-pencil"></i>
-						</button>
-						<%
-						}
-						%>
-					</div>
-				</div>
-				<%
-				}
-				} else {
-				%>
-				<div
-					class="no-exams-message d-flex justify-content-center align-items-center"
-					style="height: 100%;">
-					<h4>No exams to show</h4>
-				</div>
-				<%
-				}
-				%>
-			</div>
-			<div class="col-lg-4 col-md-5 col-sm-12 right-container">
-				<div id="examDetails">
-					<h2>Exam Details</h2>
-					<p>Select an exam to view details.</p>
-				</div>
-				<% if (roleId != 0) { %>
-				<a id="applyNowButton" href="#" class="btn btn-primary btn-lg apply-now-button">Apply Now</a>
-				<% } %>
-			</div>
-		</div>
-	</div>
-
-<div class="modal fade" id="updateExamModal" tabindex="-1"
-    role="dialog" aria-labelledby="updateExamModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateExamModalLabel">Update Exam Details</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <div id="nav-placeholder"></div>
+    <!--  <div id="alertMessage" class="alert" role="alert"></div> -->
+    <div class="container-fluid container-wrapper">
+        <div class="row h-100">
+            <div class="col-lg-8 col-md-7 col-sm-12 left-container">
+                <% if (roleId == 0) { %>
+                <a href="addExam.jsp" class="btn btn-primary add-exam-button">Add New Exam</a>
+                <% } %>
+                <h2>Exams</h2>
+                <button id="showAllExamsBtn" class="btn btn-outline-secondary">Show All</button>
+                <%
+                if (exams != null && !exams.isEmpty()) {
+                    for (ExamDetails exam : exams) {
+                        boolean isApplied = appliedExams.contains(exam.getExamId());
+                %>
+                <div class="card <%= isApplied ? "applied-exam" : "" %>" id="exam<%=exam.getExamId()%>">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title"><%=exam.getExamName()%></h5>
+                            <p class="card-text"><%=exam.getDescription()%></p>
+                        </div>
+                        <%
+                        if (roleId == 0) {
+                        %>
+                        <button class="btn btn-light edit-btn" data-toggle="modal"
+                            data-target="#updateExamModal"
+                            data-exam-id="<%=exam.getExamId()%>"
+                            data-exam-name="<%=exam.getExamName()%>"
+                            data-exam-date="<%=exam.getExamDate()%>"
+                            data-application-start="<%=exam.getApplicationStartDate()%>"
+                            data-application-end="<%=exam.getApplicationEndDate()%>">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <%
+                        }
+                        %>
+                        <% if (isApplied) { %>
+                        <span class="badge badge-success">Applied</span>
+                        <% } %>
+                    </div>
+                </div>
+                <%
+                    }
+                } else {
+                %>
+                <div class="no-exams-message d-flex justify-content-center align-items-center" style="height: 100%;">
+                    <h4>No exams to show</h4>
+                </div>
+                <%
+                }
+                %>
             </div>
-            <div class="modal-body">
-                <form id="updateExamForm" action="UpdateExamServlet" method="post">
-                    <input type="hidden" id="examIdInput" name="examId">
-                    <div class="form-group">
-                        <label for="examName">Exam Name</label> 
-                        <input type="text" class="form-control" id="examName" name="examName" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="examDate">Exam Date</label> 
-                        <input type="date" class="form-control" id="examDate" name="examDate" required>
-                        <small id="examDateError" class="form-text text-danger"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="applicationStart">Application Start Date</label> 
-                        <input type="date" class="form-control" id="applicationStart" name="applicationStart" required> 
-                        <small id="applicationStartError" class="form-text text-danger"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="applicationEnd">Application End Date</label> 
-                        <input type="date" class="form-control" id="applicationEnd" name="applicationEnd" required> 
-                        <small id="applicationEndError" class="form-text text-danger"></small>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="updateExamForm">Save Changes</button>
+            <div class="col-lg-4 col-md-5 col-sm-12 right-container">
+                <div id="examDetails">
+                    <h2>Exam Details</h2>
+                    <p>Select an exam to view details.</p>
+                </div>
+                <% if (roleId != 0) { %>
+                <a id="applyNowButton" href="#" class="btn btn-primary btn-lg apply-now-button">Apply Now</a>
+                <% } %>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    $(function() {
-        $("#nav-placeholder").load("navbar.jsp");
-        
-        $("#applyNowButton").hide(); 
-        
-        $(".card").click(function() {
-            var examId = $(this).attr("id").substring(4);
-                $("#applyNowButton").attr("href", "applyExam.jsp?examId=" + examId).show(); 
-                
+    <div class="modal fade" id="updateExamModal" tabindex="-1" role="dialog" aria-labelledby="updateExamModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateExamModalLabel">Update Exam Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateExamForm" action="UpdateExamServlet" method="post">
+                        <input type="hidden" id="examIdInput" name="examId">
+                        <div class="form-group">
+                            <label for="examName">Exam Name</label>
+                            <input type="text" class="form-control" id="examName" name="examName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="examDate">Exam Date</label>
+                            <input type="date" class="form-control" id="examDate" name="examDate" required>
+                            <small id="examDateError" class="form-text text-danger"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="applicationStart">Application Start Date</label>
+                            <input type="date" class="form-control" id="applicationStart" name="applicationStart" required>
+                            <small id="applicationStartError" class="form-text text-danger"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="applicationEnd">Application End Date</label>
+                            <input type="date" class="form-control" id="applicationEnd" name="applicationEnd" required>
+                            <small id="applicationEndError" class="form-text text-danger"></small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="updateExamForm">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            $("#examIdInput").val(examId);
-
-            $.ajax({
-                url: "GetExamDetailsServlet",
-                method: "GET",
-                data: {
-                    examId: examId
-                },
-                success: function(response) {
-                    $("#examDetails").html(response);
-                    $("#updateButton").data("exam-id", examId).show();
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error retrieving exam details:", error);
-                }
-            });
-        });
-
-        var message = "<%= request.getParameter("message") %>";
-        var type = "<%= request.getParameter("type") %>";
-        if (message) {
-            var alertMessage = "";
-
-            if (message === "examAddedSuccessfully") {
-                alertMessage = "Exam added successfully!";
-            } else if (message === "errorAddingExam") {
-                alertMessage = "Something went wrong. Please try again later.";
-            } else if (message === "examUpdatedSuccessfully") {
-                alertMessage = "Exam updated successfully!";
-            } else if (message === "errorUpdatingExam") {
-                alertMessage = "Error updating exam. Please try again later.";
-            } else if (message === "examAppliedSuccessfully") {
-                alertMessage = "Exam applied successfully!";
-            } else if (message === "examApplicationUnSuccessfull") {
-                alertMessage = "Exam application unsuccessful. Please try again later.";
-            }
-
-            showAlert(alertMessage, type);
-        }
-
-        function showAlert(message, type) {
-            if (message) {
-                var alertElement = $('#alertMessage');
-                alertElement.text(message);
-                if (type === 'success') {
-                    alertElement.removeClass('alert-danger').addClass('alert-success');
+    <script>
+        $(function() {
+            $("#nav-placeholder").load("navbar.jsp");
+            
+            $(".card").click(function() {
+                var examId = $(this).attr("id").substring(4);
+                var isApplied = $(this).hasClass("applied-exam");
+                if (isApplied) {
+                    $("#applyNowButton").hide();
                 } else {
-                    alertElement.removeClass('alert-success').addClass('alert-danger');
+                    $("#applyNowButton").attr("href", "applyExam.jsp?examId=" + examId).show();
                 }
-                alertElement.addClass('show');
-                setTimeout(function() {
-                    alertElement.fadeOut('slow', function() {
-                        $(this).remove();
-                    });
-                }, 3000);
-            }
-        }
 
-        $('#updateExamModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var examId = button.data('exam-id');
-            var examName = button.data('exam-name');
-            var examDate = button.data('exam-date');
-            var applicationStart = button.data('application-start');
-            var applicationEnd = button.data('application-end');
-            console.log("Exam Date:", examDate);
-            console.log("Application Start:", applicationStart, "Application End:", applicationEnd);
+                $("#examIdInput").val(examId);
 
-            var modal = $(this);
-            modal.find('#examIdInput').val(examId);
-            modal.find('#examName').val(examName);
-            modal.find('#examDate').val(examDate);
-            modal.find('#applicationStart').val(applicationStart);
-            modal.find('#applicationEnd').val(applicationEnd);
-        });
-
-        $('#updateExamForm').submit(function(event) {
-            console.log("Form submitted");
-
-            var examDate = $('#examDate').val();
-            var applicationStart = $('#applicationStart').val();
-            var applicationEnd = $('#applicationEnd').val();
-
-            console.log("Exam Date:", examDate);
-            console.log("Application Start:", applicationStart);
-            console.log("Application End:", applicationEnd);
-
-            var threeDaysFromToday = new Date();
-            threeDaysFromToday.setDate(threeDaysFromToday.getDate() + 3);
-            document.getElementById('examDateError').innerText = '';
-            document.getElementById('applicationStartError').innerText = '';
-            document.getElementById('applicationEndError').innerText = '';
-            document.getElementById('examNameError').innerText = '';
-
-            var valid = true;
-
-            if (new Date(applicationStart) >= new Date(applicationEnd)) {
-                document.getElementById('applicationStartError').innerText = 'The application start date should be before the application end date.';
-                valid = false;
-            }
-            if (new Date(applicationStart) >= new Date(examDate) || new Date(applicationEnd) >= new Date(examDate)) {
-                document.getElementById('applicationEndError').innerText = 'Both application start and end dates should be before the exam date.';
-                valid = false;
-            } 
-            if (new Date(examDate) < threeDaysFromToday) {
-                document.getElementById('examDateError').innerText = 'The exam date should be at least 3 days from today.';
-                valid = false;
-            }
-
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
-        
-        $(document).ready(function() {
-            $("#showAllExamsBtn").click(function() {
                 $.ajax({
-                    url: "GetExamDetailsServlet",  
-                    method: "POST",
+                    url: "GetExamDetailsServlet",
+                    method: "GET",
+                    data: { examId: examId },
                     success: function(response) {
-                    	 location.reload();
+                        $("#examDetails").html(response);
+                        $("#updateButton").data("exam-id", examId).show();
                     },
                     error: function(xhr, status, error) {
-                        console.error("Error retrieving all exams:", error);
+                        console.error("Error retrieving exam details:", error);
                     }
                 });
             });
+
+            var message = "<%= request.getParameter("message") %>";
+            var type = "<%= request.getParameter("type") %>";
+            if (message) {
+                var alertMessage = "";
+
+                if (message === "examAddedSuccessfully") {
+                    alertMessage = "Exam added successfully!";
+                } else if (message === "errorAddingExam") {
+                    alertMessage = "Something went wrong. Please try again later.";
+                } else if (message === "examUpdatedSuccessfully") {
+                    alertMessage = "Exam updated successfully!";
+                } else if (message === "errorUpdatingExam") {
+                    alertMessage = "Error updating exam. Please try again later.";
+                } else if (message === "examAppliedSuccessfully") {
+                    alertMessage = "Exam applied successfully!";
+                } else if (message === "examApplicationUnSuccessfull") {
+                    alertMessage = "Exam application unsuccessful. Please try again later.";
+                }
+
+                showAlert(alertMessage, type);
+            }
+
+            function showAlert(message, type) {
+                if (message) {
+                    var alertElement = $('#alertMessage');
+                    alertElement.text(message);
+                    if (type === 'success') {
+                        alertElement.removeClass('alert-danger').addClass('alert-success');
+                    } else {
+                        alertElement.removeClass('alert-success').addClass('alert-danger');
+                    }
+                    alertElement.addClass('show');
+                    setTimeout(function() {
+                        alertElement.fadeOut('slow', function() {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                }
+            }
+
+            $('#updateExamModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var examId = button.data('exam-id');
+                var examName = button.data('exam-name');
+                var examDate = button.data('exam-date');
+                var applicationStart = button.data('application-start');
+                var applicationEnd = button.data('application-end');
+                console.log("Exam Date:", examDate);
+                console.log("Application Start:", applicationStart, "Application End:", applicationEnd);
+
+                var modal = $(this);
+                modal.find('#examIdInput').val(examId);
+                modal.find('#examName').val(examName);
+                modal.find('#examDate').val(examDate);
+                modal.find('#applicationStart').val(applicationStart);
+                modal.find('#applicationEnd').val(applicationEnd);
+            });
+
+            $('#updateExamForm').submit(function(event) {
+                console.log("Form submitted");
+
+                var examDate = $('#examDate').val();
+                var applicationStart = $('#applicationStart').val();
+                var applicationEnd = $('#applicationEnd').val();
+
+                console.log("Exam Date:", examDate);
+                console.log("Application Start:", applicationStart);
+                console.log("Application End:", applicationEnd);
+
+                var threeDaysFromToday = new Date();
+                threeDaysFromToday.setDate(threeDaysFromToday.getDate() + 3);
+                document.getElementById('examDateError').innerText = '';
+                document.getElementById('applicationStartError').innerText = '';
+                document.getElementById('applicationEndError').innerText = '';
+                document.getElementById('examNameError').innerText = '';
+
+                var valid = true;
+
+                if (new Date(applicationStart) >= new Date(applicationEnd)) {
+                    document.getElementById('applicationStartError').innerText = 'The application start date should be before the application end date.';
+                    valid = false;
+                }
+                if (new Date(applicationStart) >= new Date(examDate) || new Date(applicationEnd) >= new Date(examDate)) {
+                    document.getElementById('applicationEndError').innerText = 'Both application start and end dates should be before the exam date.';
+                    valid = false;
+                } 
+                if (new Date(examDate) < threeDaysFromToday) {
+                    document.getElementById('examDateError').innerText = 'The exam date should be at least 3 days from today.';
+                    valid = false;
+                }
+
+                if (!valid) {
+                    event.preventDefault();
+                }
+            });
+            
+            $(document).ready(function() {
+                $("#showAllExamsBtn").click(function() {
+                    $.ajax({
+                        url: "GetExamDetailsServlet",  
+                        method: "POST",
+                        success: function(response) {
+                             location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error retrieving all exams:", error);
+                        }
+                    });
+                });
+            });
+
         });
-
-    });
-</script>
-
+    </script>
 </body>
+
 </html>
 
