@@ -235,7 +235,7 @@ System.out.println("from applyExam page = "+cities);
                         </div>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-success">Next <i class="fas fa-arrow-right"></i></button>
+                       <button type="submit" class="btn btn-success" id="submitBtn">Next <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -250,6 +250,7 @@ System.out.println("from applyExam page = "+cities);
 
     document.addEventListener('DOMContentLoaded', function() {
         const formElements = document.querySelectorAll('.form-control, .form-select');
+        const submitBtn = document.getElementById('submitBtn');
 
         formElements.forEach(element => {
              if (!element.id.startsWith('cityPreference')) {
@@ -275,11 +276,21 @@ System.out.println("from applyExam page = "+cities);
             document.getElementById('age').value = age;
 
             localStorage.setItem('age', age);
+
+            if (age < 18) {
+                alert("Age must be 18 or above to apply.");
+                submitBtn.disabled = true;
+            } else {
+                submitBtn.disabled = false;
+            }
         });
 
         const savedAge = localStorage.getItem('age');
         if (savedAge) {
             document.getElementById('age').value = savedAge;
+            if (parseInt(savedAge) < 18) {
+                submitBtn.disabled = true;
+            }
         }
     });
     

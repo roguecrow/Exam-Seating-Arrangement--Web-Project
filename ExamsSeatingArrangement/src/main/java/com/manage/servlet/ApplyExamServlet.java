@@ -71,8 +71,28 @@ public class ApplyExamServlet extends HttpServlet {
             	System.out.println("case 2");
                 handleExamApplication(request, response, userDetail);
                 break;
+            
+            case "updateDoc":
+            	System.out.println("case 3");
+			try {
+				handleUpdateDocuments(request, response, userDetail);
+			} catch (ClassNotFoundException | ServletException | IOException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+                break;
+                
+                
+            case "submitDetails":
+            	System.out.println("case 4");
+			try {
+				handleSubmitDetails(request, response, userDetail);
+				break;
+			} catch (ClassNotFoundException | ServletException | IOException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             default:
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
                 break;
         }
         
@@ -80,38 +100,125 @@ public class ApplyExamServlet extends HttpServlet {
 
     private void handleDocumentUpload(HttpServletRequest request, HttpServletResponse response, UserDetails userDetail) throws ServletException, IOException, ClassNotFoundException, SQLException {
         System.out.println("from handle doc");
+
+        HttpSession session = request.getSession();
+        UserDetails details = (UserDetails) session.getAttribute("userDetails");
+        String examIdStr = (String) session.getAttribute("examId");
+        int examId = Integer.parseInt(examIdStr);
+        String appId = examIdStr + details.getRollNo();
+        System.out.println("application ID :" + appId);
         
+        
+        Part passportPhotoPart = request.getPart("passportPhoto");
+        Part digitalSignaturePart = request.getPart("digitalSignature");
+        Part qualificationDocumentsPart = request.getPart("qualificationDocuments");
+
+        details.setPassportSizePhoto(passportPhotoPart.getInputStream().readAllBytes());
+        details.setDigitalSignature(digitalSignaturePart.getInputStream().readAllBytes());
+        details.setQualificationDocuments(qualificationDocumentsPart.getInputStream().readAllBytes());
+        
+        session.setAttribute("userDetails",details);
+        InputStream passportPhoto = passportPhotoPart.getInputStream();
+        InputStream digitalSignature = digitalSignaturePart.getInputStream();
+        InputStream qualificationDocuments = qualificationDocumentsPart.getInputStream();
+        
+        response.sendRedirect("ApplicationPreview.jsp?examId="+examId);
+
+        if (passportPhoto != null) passportPhoto.close();
+        if (digitalSignature != null) digitalSignature.close();
+        if (qualificationDocuments != null) qualificationDocuments.close();
+    }
+    
+    private void handleUpdateDocuments(HttpServletRequest request, HttpServletResponse response, UserDetails userDetail) throws ServletException, IOException, ClassNotFoundException, SQLException {
+        System.out.println("from update doc");
+
+        DbManager manage = new DbManager();
+        HttpSession session = request.getSession();
+        UserDetails details = (UserDetails) session.getAttribute("userDetails");
+        String examIdStr = (String) session.getAttribute("examId");
+        int examId = Integer.parseInt(examIdStr);
+        String appId = examIdStr + details.getRollNo();
+        System.out.println("application ID :" + appId);
+
+        Part passportPhotoPart = request.getPart("updatePassportPhoto");
+        Part digitalSignaturePart = request.getPart("updateDigitalSignature");
+        Part qualificationDocumentsPart = request.getPart("updateQualificationDocuments");
+
+        if (passportPhotoPart != null && passportPhotoPart.getSize() > 0) {
+        	System.out.println("pass updated");
+            details.setPassportSizePhoto(passportPhotoPart.getInputStream().readAllBytes());
+        }
+        if (digitalSignaturePart != null && digitalSignaturePart.getSize() > 0) {
+        	System.out.println("digi updated");
+            details.setDigitalSignature(digitalSignaturePart.getInputStream().readAllBytes());
+        }
+        if (qualificationDocumentsPart != null && qualificationDocumentsPart.getSize() > 0) {
+        	System.out.println("qualifi updated");
+            details.setQualificationDocuments(qualificationDocumentsPart.getInputStream().readAllBytes());
+        }
+
+        session.setAttribute("userDetails", details);
+
+        if(manage.updateExamDoc(details)) {
+        	System.out.println("doc updated");
+        	 response.sendRedirect("ApplicationPreview.jsp?examId=" + examId);
+        }
+
+       
+
+        if (passportPhotoPart != null) {
+            passportPhotoPart.getInputStream().close();
+        }
+        if (digitalSignaturePart != null) {
+            digitalSignaturePart.getInputStream().close();
+        }
+        if (qualificationDocumentsPart != null) {
+            qualificationDocumentsPart.getInputStream().close();
+        }
+    }
+
+    
+    private void handleSubmitDetails(HttpServletRequest request, HttpServletResponse response, UserDetails userDetail) throws ServletException, IOException, ClassNotFoundException, SQLException {
+        System.out.println("from handle preview");
+
         DbManager manage = new DbManager();
         HttpSession session = request.getSession();
         UserDetails details = (UserDetails) session.getAttribute("userDetails");
         String examIdStr = (String) session.getAttribute("examId");
         int examId = Integer.parseInt(examIdStr);
         ExamSeatAllocator allocator = new ExamSeatAllocator();
-        String appId = examIdStr+details.getRollNo();
-        System.out.println("application ID :"+appId);
-
-        Part passportPhotoPart = request.getPart("passportPhoto");
-        Part digitalSignaturePart = request.getPart("digitalSignature");
-        Part qualificationDocumentsPart = request.getPart("qualificationDocuments");
-
-        InputStream passportPhoto = passportPhotoPart != null ? passportPhotoPart.getInputStream() : null;
-        InputStream digitalSignature = digitalSignaturePart != null ? digitalSignaturePart.getInputStream() : null;
-        InputStream qualificationDocuments = qualificationDocumentsPart != null ? qualificationDocumentsPart.getInputStream() : null;
-                
-        if(manage.addUserDetails(userDetail,appId) == 1 && manage.addUserDocument(userDetail.getRollNo(), passportPhoto, digitalSignature, qualificationDocuments) == 1) {
-        	
-        	allocator.allocateSeats(details,examId);
-        	response.sendRedirect("homePage.jsp?message=examAppliedSuccessfully");
+        String appId = examIdStr + details.getRollNo();
+        System.out.println("application ID :" + appId);
+        
+        byte[] passportPhoto = details.getPassportSizePhoto();
+        byte[] digitalSignature = details.getDigitalSignature();
+        byte[] qualificationDocuments = details.getQualificationDocuments();
+        
+        System.out.println("passportPhoto ::: "+passportPhoto);
+        System.out.println("digitalSignature :::" +digitalSignature);
+        System.out.println("qualificationDocuments :::" +qualificationDocuments);
+        
+        if(!manage.getExamDocById(details)) {
+        	if (manage.addUserDetails(userDetail, appId) == 1 && manage.addUserDocument(userDetail.getRollNo(), passportPhoto, digitalSignature, qualificationDocuments) == 1) {
+                allocator.allocateSeats(details, examId);
+                response.sendRedirect("homePage.jsp?message=examAppliedSuccessfully");
+            } 
+        	 else {
+                 response.sendRedirect("homePage.jsp?message=examApplicationUnSuccessfull");
+             }
         }
         else {
-        	response.sendRedirect("homePage.jsp?message=examApplicationUnSuccessfull");
+        	if (manage.addUserDetails(userDetail, appId) == 1) {
+                allocator.allocateSeats(details, examId);
+                response.sendRedirect("homePage.jsp?message=examAppliedSuccessfully");
+            } 
+        	 else {
+                 response.sendRedirect("homePage.jsp?message=examApplicationUnSuccessfull");
+             }
         }
-
-        if (passportPhoto != null) passportPhoto.close();
-        if (digitalSignature != null) digitalSignature.close();
-        if (qualificationDocuments != null) qualificationDocuments.close();
-        
+       
     }
+
 
     private void handleExamApplication(HttpServletRequest request, HttpServletResponse response, UserDetails userDetail) throws ServletException, IOException {
         String fullName = request.getParameter("full_name");

@@ -11,9 +11,10 @@ public class LocationDetails {
 	private String locationUrl;
 	private int examId;
 	private int filledCapacity;
+	private String serialNo;
 
 	public LocationDetails(int allocatedSeat, int locationId, String city, String venueName, String hallName,
-			int totalCapacity, String address, String locationUrl, int examId, int filledCapacity) {
+			int totalCapacity, String address, String locationUrl, int examId, int filledCapacity, String serialNo) {
 		this.allocatedSeat = allocatedSeat;
 		this.locationId = locationId;
 		this.city = city;
@@ -24,6 +25,7 @@ public class LocationDetails {
 		this.locationUrl = locationUrl;
 		this.examId = examId;
 		this.filledCapacity = filledCapacity;
+		this.serialNo = serialNo;
 	}
 
 	// Getters and toString() method
@@ -74,5 +76,13 @@ public class LocationDetails {
 				+ '\'' + ", venueName='" + venueName + '\'' + ", hallName='" + hallName + '\'' + ", totalCapacity="
 				+ totalCapacity + ", address='" + address + '\'' + ", locationUrl='" + locationUrl + '\'' + ", examId="
 				+ examId + ", filledCapacity=" + filledCapacity + '}';
+	}
+
+	public String getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
 	}
 }

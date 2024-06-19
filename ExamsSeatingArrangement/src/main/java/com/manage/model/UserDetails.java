@@ -1,5 +1,6 @@
 package com.manage.model;
 
+import java.io.InputStream;
 import java.util.Date;
 
 public class UserDetails {
@@ -19,8 +20,11 @@ public class UserDetails {
     private String allocatedCity;
     private int serialNo;
     private String aadharNumber;
+    private byte[] passportSizePhoto;  
+    private byte[] digitalSignature;  
+    private byte[] qualificationDocuments; 
 
-    // Getters and setters for all fields
+   
 
     public int getRollNo() {
         return rollNo;
@@ -148,5 +152,29 @@ public class UserDetails {
 
     public void setAadharNumber(String aadharNumber) {
         this.aadharNumber = aadharNumber;
+    }
+
+    public byte[] getPassportSizePhoto() {
+        return passportSizePhoto;
+    }
+
+    public void setPassportSizePhoto(byte[] passportSizePhoto) {
+        this.passportSizePhoto = passportSizePhoto;
+    }
+
+    public byte[] getDigitalSignature() {
+        return digitalSignature;
+    }
+
+    public void setDigitalSignature(byte[] digitalSignature) {
+        this.digitalSignature = digitalSignature;
+    }
+
+    public byte[] getQualificationDocuments() {
+        return qualificationDocuments;
+    }
+
+    public void setQualificationDocuments(byte[] qualificationDocuments) {
+        this.qualificationDocuments = qualificationDocuments;
     }
 }

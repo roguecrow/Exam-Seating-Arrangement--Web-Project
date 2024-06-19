@@ -3,12 +3,6 @@ package com.manage.servlet;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,9 +17,10 @@ import com.manage.dao.DbManager;
  */
 @WebServlet("/AddExam")
 public class AddExamServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    static String homePageError = "homePage.jsp?message=errorAddingExam&type=error";
+    static String homePageSuccess = "homePage.jsp?message=examAddedSuccessfully&type=success";
 
-       
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -34,16 +29,16 @@ public class AddExamServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String examName = request.getParameter("examName");
         String examDescription = request.getParameter("examDescription");
         Date examDate = Date.valueOf(request.getParameter("examDate")); 
         int locationIndex = Integer.parseInt(request.getParameter("locationIndex"));
 
-        
         Date applicationStart = Date.valueOf(request.getParameter("applicationStart"));
         Date applicationEnd = Date.valueOf(request.getParameter("applicationEnd"));
 
@@ -53,7 +48,6 @@ public class AddExamServlet extends HttpServlet {
             examId = manage.createExam(examName, examDescription, examDate, applicationStart, applicationEnd);
             
             for (int i = 0; i < locationIndex; i++) {
-                
                 String city = request.getParameter("locations[" + i + "].city");
                 String venueName = request.getParameter("locations[" + i + "].venueName");
                 String hallName = request.getParameter("locations[" + i + "].hallName");
@@ -73,27 +67,26 @@ public class AddExamServlet extends HttpServlet {
                 int affectedRows = manage.addLocationToExam(city, venueName, hallName, capacity, address, locationUrl, examId);
                 
                 if (affectedRows != 1) {
-                    int row = manage.deleteExam(examId); 
-                    System.out.println("affected row: " + row);
-                    response.sendRedirect("homePage.jsp?message=errorAddingExam");
+                    manage.deleteExam(examId);
+                    redirectWithError(response, homePageError);
                     return;
                 }
             }
             
-            response.sendRedirect("homePage.jsp?message=examAddedSuccessfully");
+            redirectWithError(response, homePageSuccess);
         } catch (java.sql.SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             try {
                 DbManager manage = new DbManager();
-                int row = manage.deleteExam(examId); 
-                System.out.println("affected row: " + row);
+                int affectedRow = manage.deleteExam(examId);
+                System.out.println("deleted exam row :" + affectedRow);
             } catch (SQLException | ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
-            response.sendRedirect("homePage.jsp?message=errorAddingExam");
+            redirectWithError(response, homePageError);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            response.sendRedirect("homePage.jsp?message=errorAddingExam");
+            redirectWithError(response, homePageError);
         }
 
         System.out.println("Exam Name: " + examName);
@@ -103,4 +96,11 @@ public class AddExamServlet extends HttpServlet {
         System.out.println("Application End Date: " + applicationEnd);
     }
 
+    private void redirectWithError(HttpServletResponse response, String url) {
+        try {
+            response.sendRedirect(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

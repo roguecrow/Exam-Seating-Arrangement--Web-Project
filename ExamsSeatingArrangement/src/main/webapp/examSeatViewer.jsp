@@ -97,6 +97,7 @@
     }
 
     .custom-navbar {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         background-color: #ffffff;
     }
 
@@ -120,26 +121,57 @@
 
     .seat-grid {
         display: grid;
-        grid-gap: 5px;
+        grid-gap: 10px;
+        margin-bottom: 20px;
     }
 
-    .seat-cell {
-        width: 30px;
-        height: 30px;
-        background-color: #e0e0e0;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.seat-cell {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e060;
+    border: 2px solid #f5f5f5;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+}
 
     .seat-cell.allocated {
         background-color: #007bff;
         color: white;
+        border-color: #0056b3;
+    }
+
+    .venue-details-container {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+    }
+
+    .venue-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .venue-details p {
+        margin: 0;
+        font-size: 1.1em;
+        font-weight: bold;
     }
 </style>
 </head>
 <body>
+<%
+    request.setAttribute("currentPage", "otherPage");
+%>
+<jsp:include page="navbar.jsp" />
+
 <%
     DbManager manage = new DbManager();
     UserDetails userDetails = (UserDetails) session.getAttribute("userDetails");
@@ -148,7 +180,6 @@
     List<ExamDetails> exams = (List<ExamDetails>) session.getAttribute("exams");
     List<Integer> appliedExams = manage.getExamIdsForRollNo(userDetails.getRollNo());
 %>
-<div id="nav-placeholder"></div>
 <div class="container-fluid container-wrapper">
     <div class="left-container">
         <h2>Applied Exams</h2>
@@ -173,13 +204,18 @@
     <div class="right-container">
         <h2>Exam Seat Allocation</h2>
         <div id="seat-grid" class="seat-grid"></div>
+        <div class="venue-details-container">
+            <div id="venue-details" class="venue-details">
+                <p id="serial-no"></p>
+                <p id="venue-name"></p>
+                <p id="hall-name"></p>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
     $(function() {
-        $("#nav-placeholder").load("navbar.jsp");
-
         $(".list-group-item").click(function() {
             $(".list-group-item").removeClass("active");
             $(this).addClass("active");
@@ -197,6 +233,9 @@
 
                     var totalCapacity = response.totalCapacity;
                     var allocatedSeat = response.allocatedSeat;
+                    var venueName = response.venueName;
+                    var hallName = response.hallName;
+                    var serialNo = response.serialNo; // Assuming serialNo is returned by the servlet
 
                     var rows = Math.ceil(Math.sqrt(totalCapacity));
                     var columns = Math.ceil(totalCapacity / rows);
@@ -205,12 +244,26 @@
                     seatGrid.css('grid-template-columns', 'repeat(' + columns + ', 1fr)');
 
                     for (var i = 1; i <= totalCapacity; i++) {
-                        var seatCell = $("<div class='seat-cell'></div>").text(i);
-                        if (i == allocatedSeat) {
-                            seatCell.addClass("allocated");
-                        }
+                    	var seatCell = $("<div class='seat-cell'></div>").append('<i class="fas fa-chair"></i>');
+                    	 if (i == allocatedSeat) {
+                             seatCell.addClass("allocated").attr('data-bs-toggle', 'popover').attr('data-bs-content', 'Allocated Seat: ' + i);
+                         }
                         seatGrid.append(seatCell);
                     }
+
+                    $("#venue-name").text("Venue: " + venueName);
+                    $("#hall-name").text("Hall: " + hallName);
+                    $("#serial-no").text("Serial No: " + serialNo);
+                    
+                    $('[data-bs-toggle="popover"]').each(function () {
+                        var popoverContent = $(this).attr('data-bs-content');
+                        $(this).popover({
+                            content: popoverContent,
+                            placement: 'top', 
+                            trigger: 'hover', 
+                            html: true 
+                        });
+                    });
                 }
             });
         });

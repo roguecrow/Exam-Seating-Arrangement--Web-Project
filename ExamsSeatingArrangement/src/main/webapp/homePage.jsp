@@ -210,6 +210,7 @@ body {
 }
 
 .custom-navbar {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 	background-color: #ffffff;
 }
 
@@ -268,13 +269,18 @@ body {
     position: absolute;
 }
 .badge {
-padding: 10px;
+padding: 6px;
 }
 
 </style>
 
 </head>
 <body>
+<%
+    request.setAttribute("currentPage", "homePage");
+%>
+<jsp:include page="navbar.jsp" />
+
     <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
@@ -293,8 +299,7 @@ padding: 10px;
     List<Integer> appliedExams = manage.getExamIdsForRollNo(userDetails.getRollNo());
     %>
 
-    <div id="nav-placeholder"></div>
-    <!--  <div id="alertMessage" class="alert" role="alert"></div> -->
+    <div id="alertMessage" class="alert" role="alert"></div>
     <div class="container-fluid container-wrapper">
         <div class="row h-100">
             <div class="col-lg-8 col-md-7 col-sm-12 left-container">
@@ -434,14 +439,17 @@ padding: 10px;
 
                 if (message === "examAddedSuccessfully") {
                     alertMessage = "Exam added successfully!";
+                    type = "success";
                 } else if (message === "errorAddingExam") {
                     alertMessage = "Something went wrong. Please try again later.";
                 } else if (message === "examUpdatedSuccessfully") {
                     alertMessage = "Exam updated successfully!";
+                    type = "success";
                 } else if (message === "errorUpdatingExam") {
                     alertMessage = "Error updating exam. Please try again later.";
                 } else if (message === "examAppliedSuccessfully") {
                     alertMessage = "Exam applied successfully!";
+                    type = "success";
                 } else if (message === "examApplicationUnSuccessfull") {
                     alertMessage = "Exam application unsuccessful. Please try again later.";
                 }

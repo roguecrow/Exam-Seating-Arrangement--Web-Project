@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="com.manage.model.UserDetails" %>
-    
-    
- <%
+
+<%
 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 response.setHeader("Expires", "0"); // Proxies.
@@ -16,6 +15,8 @@ if (session == null || session.getAttribute("userDetails") == null) {
 UserDetails userDetails = (UserDetails) session.getAttribute("userDetails");
 String userName = userDetails != null ? userDetails.getUsername() : "User";
 int roleId = userDetails != null ? userDetails.getRoleId() : 1; 
+String currentPage = (String) request.getAttribute("currentPage");
+System.out.println("currentPage :" + currentPage);
 %>
 <header>
     <nav class="navbar navbar-expand-lg custom-navbar">
@@ -25,24 +26,29 @@ int roleId = userDetails != null ? userDetails.getRoleId() : 1;
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="homePage.jsp">Home</a>
                     </li>
+                    <% if (roleId == 1) { %>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Services
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                            <li><a class="dropdown-item" href="service1.html">view Application status</a></li>
-                            <li><a class="dropdown-item" href="examSeatViewer.jsp">view exam seat allocation</a></li>
-                            <li><a class="dropdown-item" href="service3.html">Service 3</a></li>
+                            <li><a class="dropdown-item" href="viewHallTicket.jsp">View Exam Hall Tickets</a></li>
+                            <li><a class="dropdown-item" href="examSeatViewer.jsp">View Exam Seat Allocation</a></li>
+                            <!-- <li><a class="dropdown-item" href="service3.html">Service 3</a></li> -->
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="about_us_page.html">Help</a></li>
-                        <form class="d-flex search-form" role="search" action="SearchViewServlet" method="GET">
+                        <a class="nav-link active" aria-current="page" href="help.jsp">Help</a>
+                    </li>
+                    <% } %>
+                    <% if ("homePage".equals(currentPage)) { %>
+                    <form class="d-flex search-form" role="search" action="SearchViewServlet" method="GET">
                         <input class="form-control me-2 search-bar" type="search" name="query" placeholder="Search Exams..." aria-label="Search">
                         <button class="btn btn-outline-success submit-button btn-black" type="submit">
-                        <i class="fas fa-search"></i>
+                            <i class="fas fa-search"></i>
                         </button>
-                        </form>
+                    </form>
+                    <% } %>
                 </ul>
                 <div class="dropdown profile-dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,10 +61,11 @@ int roleId = userDetails != null ? userDetails.getRoleId() : 1;
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
                         <div class="dropdown-divider"></div>
-                        <li><form action="LogoutServlet" method="post" style="display: inline;">
+                        <li>
+                            <form action="LogoutServlet" method="post" style="display: inline;">
                                 <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Log out</button>
                             </form>
-                            </li>
+                        </li>
                     </ul>
                 </div>
             </div>
